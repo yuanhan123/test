@@ -8,6 +8,14 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Install pytest') {
+            steps {
+                script {
+                    sh 'pip install pytest'
+                        }
+                }
+        }
+
 
         stage('Run Tests') {
             steps {
