@@ -1,51 +1,31 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Update Package Repositories') {
-            steps {
-                script {
-                    sh 'apk update'
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Run integration tests using pytest
-                script {
-                    sh 'pytest tests/integration_tests.py'
-                }
-            }
-        }
-
-        stage('UI Testing') {
-            steps {
-                // Run UI tests using Selenium
-                script {
-                    sh 'python ui_tests.py'
-                }
-            }
-        }
-
-        stage('Install Python and Pip') {
-            steps {
-                script {
-                    sh 'apk add python3'
-                    sh 'python3 -m ensurepip'
-                    sh 'ln -s /usr/bin/pip3 /usr/bin/pip'
-                }
-            }
-        }
-
-        stage('Install pytest') {
-            steps {
-                script {
-                    sh 'pip install pytest'
-                }
-            }
-        }
-
-        // Add other stages as needed
-    }
+	agent none
+	stages {
+		stage('Integration UI Test') {
+			parallel {
+				stage('Deploy') {
+					agent any
+					steps {
+						sh 'chmod +x jenkins/scripts/deploy.sh'
+						sh 'chmod +x jenkins/scripts/kill.sh'
+						sh './jenkins/scripts/deploy.sh'
+						input message: 'Finished using the web site? (Click "Proceed" to continue)'
+						sh './jenkins/scripts/kill.sh'
+					}
+				}
+				stage('Headless Browser Test') {
+					agent {
+						docker {
+							image 'maven:3-alpine' 
+							args '-v /root/.m2:/root/.m2' 
+						}
+					}
+					steps {
+						sh 'mvn -B -DskipTests clean package'
+						sh 'mvn test'
+					}
+				}
+			}
+		}
+	}
 }
