@@ -4,13 +4,15 @@ pipeline {
 		stage('Integration UI Test') {
 			parallel {
 				stage('Deploy') {
-    					agent any
+					    agent any
 					    steps {
-					        sh 'apt-get update -y && apt-get install -y python'
-					        sh 'python app.py'
+					        sh 'sudo apt-get update -y'
+					        sh 'sudo apt-get install -y python'
+					        sh 'py app.py'
 					        // rest of your deployment steps
 					    }
 					}
+
 
 				stage('Headless Browser Test') {
 					agent {
