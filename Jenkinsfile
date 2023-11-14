@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Update Package Repositories') {
             steps {
-                // Check out the source code from your version control system
-                checkout scm
+                script {
+                    sh 'apk update'
+                }
             }
         }
 
@@ -27,14 +28,25 @@ pipeline {
             }
         }
 
-        stage('Build and Deploy') {
+        stage('Install Python and Pip') {
             steps {
-                // Additional steps for building and deploying your Flask app
                 script {
-                    sh'python app.py'
+                    sh 'apk add python3'
+                    sh 'python3 -m ensurepip'
+                    sh 'ln -s /usr/bin/pip3 /usr/bin/pip'
                 }
             }
         }
+
+        stage('Install pytest') {
+            steps {
+                script {
+                    sh 'pip install pytest'
+                }
+            }
+        }
+
+        // Add other stages as needed
     }
 
     post {
