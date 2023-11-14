@@ -48,13 +48,4 @@ pipeline {
 
         // Add other stages as needed
     }
-
-    post {
-        failure {
-            // Send notifications on failure
-            emailext subject: 'Flask App Build Failed',
-                      body: 'Something went wrong with the build. Please check the Jenkins console output for details.',
-                      to: 'your@email.com'
-        }
-    }
 }
