@@ -6,7 +6,7 @@ pipeline {
 				stage('Deploy') {
 					agent any
 					steps {
-						sh 'py app.py'
+						sh 'python app.py'
 						sh 'chmod +x jenkins/scripts/deploy.sh'
 						sh 'chmod +x jenkins/scripts/kill.sh'
 						sh './jenkins/scripts/deploy.sh'
