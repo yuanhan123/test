@@ -11,7 +11,7 @@ pipeline {
         stage('Install pytest') {
             steps {
                 script {
-                    sh 'pip install pytest'
+                    sh 'apk add pytest'
                         }
                 }
         }
