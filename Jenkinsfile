@@ -8,14 +8,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Install pytest') {
-            steps {
-                script {
-                    sh 'apk add pytest'
-                        }
-                }
-        }
-
 
         stage('Run Tests') {
             steps {
