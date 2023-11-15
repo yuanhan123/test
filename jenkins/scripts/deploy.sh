@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 set -x
-docker run -d -p 5000:5000 --name ver2 -v /var/jenkins_home/workspace/test/src:/var/www/html nginx:alpine
+docker run -d -p 5000:80 --name ver2 -v /var/jenkins_home/workspace/test/src:/var/www/html nginx:alpine
 sleep 1
 set +x
 
